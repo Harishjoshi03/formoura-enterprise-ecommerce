@@ -1,0 +1,54 @@
+server:
+  port: 8082
+
+spring:
+
+  application:
+    name: user-service
+
+  config:
+    import: optional:configserver:http://localhost:8888
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/formoura_user
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+springdoc:
+
+  api-docs:
+
+    enabled: true
+
+    path: /v3/api-docs
+
+  swagger-ui:
+
+    enabled: true
+
+    path: /swagger-ui.html
+
+    display-request-duration: true
+
+    operations-sorter: method
+
+    tags-sorter: alpha
+
+    try-it-out-enabled: true
+
+aws:
+  access-key: YOUR_ACCESS_KEY
+  secret-key: YOUR_SECRET_KEY
+  region: ap-south-1
+  bucket-name: formoura-images

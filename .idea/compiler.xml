@@ -8,31 +8,39 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
       </profile>
-      <profile name="Annotation profile for config-server" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
-        </processorPath>
-        <module name="config-server" />
-      </profile>
       <profile name="Annotation profile for Formoura Enterprise E-Commerce" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok-mapstruct-binding/0.2.0/lombok-mapstruct-binding-0.2.0.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.6.3/mapstruct-processor-1.6.3.jar" />
         </processorPath>
-        <module name="api-gateway" />
         <module name="common-security" />
-        <module name="common-swagger" />
+        <module name="config-server" />
+        <module name="auth-service" />
         <module name="common-exception" />
+        <module name="api-gateway" />
+        <module name="common-swagger" />
+        <module name="user-service" />
         <module name="discovery-service" />
         <module name="common-core" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="21" />
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="api-gateway" options="-parameters" />
+      <module name="auth-service" options="-parameters" />
+      <module name="common-core" options="-parameters" />
+      <module name="common-exception" options="-parameters" />
+      <module name="common-security" options="-parameters" />
+      <module name="common-swagger" options="-parameters" />
+      <module name="config-server" options="-parameters" />
+      <module name="discovery-service" options="-parameters" />
+      <module name="user-service" options="-parameters" />
+    </option>
   </component>
 </project>

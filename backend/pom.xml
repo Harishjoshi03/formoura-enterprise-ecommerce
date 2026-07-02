@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -12,26 +13,29 @@
     <packaging>pom</packaging>
 
     <name>Formoura Enterprise E-Commerce</name>
-    <description>Enterprise E-Commerce Platform using Spring Boot Microservices</description>
 
-    <!-- ===================== Modules ===================== -->
+    <!-- ========================= Modules ========================= -->
 
     <modules>
 
-        <!-- Common Modules -->
+        <!-- Common -->
         <module>common-core</module>
         <module>common-security</module>
         <module>common-swagger</module>
         <module>common-exception</module>
 
         <!-- Infrastructure -->
-        <!--<module>config-server</module>-->
+        <module>config-server</module>
         <module>discovery-service</module>
         <module>api-gateway</module>
+        <module>auth-service</module>
 
         <!-- Business Services -->
-        <!--<module>auth-service</module>
         <module>user-service</module>
+
+        <!-- Future Services -->
+
+        <!--
         <module>product-service</module>
         <module>category-service</module>
         <module>inventory-service</module>
@@ -42,15 +46,13 @@
         <module>payment-service</module>
         <module>gst-service</module>
         <module>notification-service</module>
-        <module>report-service</module>
         <module>search-service</module>
         <module>admin-service</module>
-        <module>hr-service</module>
-        <module>audit-service</module>-->
+        -->
 
     </modules>
 
-    <!-- ===================== Properties ===================== -->
+    <!-- ========================= Properties ========================= -->
 
     <properties>
 
@@ -68,55 +70,71 @@
 
         <springdoc.version>2.8.9</springdoc.version>
 
-        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
 
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     </properties>
 
-    <!-- ===================== Dependency Management ===================== -->
+    <!-- ========================= Dependency Management ========================= -->
 
     <dependencyManagement>
 
         <dependencies>
 
             <dependency>
+
                 <groupId>org.springframework.boot</groupId>
+
                 <artifactId>spring-boot-dependencies</artifactId>
+
                 <version>${spring.boot.version}</version>
+
                 <type>pom</type>
+
                 <scope>import</scope>
+
             </dependency>
 
             <dependency>
+
                 <groupId>org.springframework.cloud</groupId>
+
                 <artifactId>spring-cloud-dependencies</artifactId>
+
                 <version>${spring.cloud.version}</version>
+
                 <type>pom</type>
+
                 <scope>import</scope>
+
             </dependency>
 
         </dependencies>
 
     </dependencyManagement>
 
-    <!-- ===================== Common Dependencies ===================== -->
+    <!-- ========================= Common Dependencies ========================= -->
 
     <dependencies>
 
-        <!-- Lombok -->
         <dependency>
+
             <groupId>org.projectlombok</groupId>
+
             <artifactId>lombok</artifactId>
+
             <version>${lombok.version}</version>
+
             <optional>true</optional>
+
         </dependency>
 
     </dependencies>
 
-    <!-- ===================== Build ===================== -->
+    <!-- ========================= Build ========================= -->
 
     <build>
 
@@ -125,15 +143,19 @@
             <plugins>
 
                 <!-- Spring Boot -->
+
                 <plugin>
 
                     <groupId>org.springframework.boot</groupId>
 
                     <artifactId>spring-boot-maven-plugin</artifactId>
 
+                    <version>${spring.boot.version}</version>
+
                 </plugin>
 
                 <!-- Maven Compiler -->
+
                 <plugin>
 
                     <groupId>org.apache.maven.plugins</groupId>
@@ -148,7 +170,11 @@
 
                         <target>${java.version}</target>
 
+                        <parameters>true</parameters>
+
                         <annotationProcessorPaths>
+
+                            <!-- Lombok -->
 
                             <path>
 
@@ -157,6 +183,30 @@
                                 <artifactId>lombok</artifactId>
 
                                 <version>${lombok.version}</version>
+
+                            </path>
+
+                            <!-- Lombok + MapStruct -->
+
+                            <path>
+
+                                <groupId>org.projectlombok</groupId>
+
+                                <artifactId>lombok-mapstruct-binding</artifactId>
+
+                                <version>0.2.0</version>
+
+                            </path>
+
+                            <!-- MapStruct -->
+
+                            <path>
+
+                                <groupId>org.mapstruct</groupId>
+
+                                <artifactId>mapstruct-processor</artifactId>
+
+                                <version>${mapstruct.version}</version>
 
                             </path>
 

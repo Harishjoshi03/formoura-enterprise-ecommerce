@@ -1,18 +1,60 @@
 server:
   port: 8080
 
+jwt:
+  secret-key: formoura123456789formoura123456789formoura123456789
+  access-token-expiration: 86400000
+  refresh-token-expiration: 604800000
+
+#  secret: YOUR_BASE64_SECRET_KEY
+
 spring:
   application:
     name: api-gateway
 
+
+  config:
+    import: optional:configserver:http://localhost:8888
+
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+
+  data:
+   redis:
+      host: localhost
+      port: 6379
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+
+  routes:
+
+    - id: auth-service
+      uri: lb://AUTH-SERVICE
+      predicates:
+        - Path=/auth/**
+
+    - id: user-service
+      uri: lb://USER-SERVICE
+      predicates:
+        - Path=/users/**
+
+    - id: product-service
+      uri: lb://PRODUCT-SERVICE
+      predicates:
+        - Path=/products/**
+
+    - id: category-service
+      uri: lb://CATEGORY-SERVICE
+      predicates:
+        - Path=/categories/**
+

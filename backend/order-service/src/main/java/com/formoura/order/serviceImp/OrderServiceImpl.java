@@ -219,4 +219,25 @@ public class OrderServiceImpl implements OrderService {
         repository.save(order);
     }
 
+    @Override
+    public void confirmOrder(Long orderId){
+
+        Order order = repository.findById(orderId)
+                .orElseThrow(() ->
+                        new BusinessException("Order Not Found"));
+
+        order.setStatus(OrderStatus.CONFIRMED);
+
+        repository.save(order);
+    }
+
+    @Override
+    public Order getOrderEntity(Long orderId) {
+
+        return repository.findById(orderId)
+                .orElseThrow(() ->
+                        new BusinessException("Order Not Found"));
+
+    }
+
 }

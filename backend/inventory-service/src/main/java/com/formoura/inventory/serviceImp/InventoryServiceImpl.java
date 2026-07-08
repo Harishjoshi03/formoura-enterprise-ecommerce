@@ -1,5 +1,6 @@
 package com.formoura.inventory.serviceImp;
 
+import com.formoura.event.inventory.InventoryRollbackEvent;
 import com.formoura.event.order.OrderCreatedEvent;
 import com.formoura.event.order.OrderItemEvent;
 import com.formoura.exception.exception.BusinessException;
@@ -202,6 +203,42 @@ public class InventoryServiceImpl implements InventoryService {
             repository.save(inventory);
 
         }
+
+    }
+
+    @Override
+    public void rollbackInventory(
+            InventoryRollbackEvent event){
+
+        event.getProducts().forEach(
+
+                (productId,qty)->{
+
+                    Inventory inventory =
+                            repository.findByProductId(
+                                            productId)
+
+                                    .orElseThrow(()->
+                                            new BusinessException(
+                                                    "Inventory Not Found"));
+
+                    inventory.setAvailableQuantity(
+
+                            inventory.getAvailableQuantity()
+                                    + qty
+
+                    );
+
+                    inventory.setReservedQuantity(
+
+                            inventory.getReservedQuantity()
+                                    - qty
+
+                    );
+
+                    repository.save(inventory);
+
+                });
 
     }
 

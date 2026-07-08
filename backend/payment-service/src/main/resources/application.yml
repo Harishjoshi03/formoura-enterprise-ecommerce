@@ -19,6 +19,25 @@ spring:
 
     show-sql: true
 
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:
+      group-id: payment-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+
 eureka:
   client:
     service-url:
@@ -65,3 +84,9 @@ jwt:
   secret-key: bXktc3VwZXItc2VjcmV0LWtleS1mb3ItZm9ybW91cmEtMjU2LWJpdA==
   access-token-expiration: 900000
   refresh-token-expiration: 604800000
+
+razorpay:
+
+  key-id: rzp_test_TB0AZBM0cYaZDS
+
+  key-secret: 09rTQZhTEEKLiXiCoZbjJtus

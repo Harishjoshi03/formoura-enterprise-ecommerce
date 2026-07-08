@@ -13,6 +13,6 @@ public class OrderResponse {
 
     private BigDecimal totalAmount;
 
-    private String orderStatus;
+    private String ;
 
 }

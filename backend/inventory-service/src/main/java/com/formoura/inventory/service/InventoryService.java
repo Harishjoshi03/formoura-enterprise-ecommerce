@@ -1,5 +1,6 @@
 package com.formoura.inventory.service;
 
+import com.formoura.event.inventory.InventoryRollbackEvent;
 import com.formoura.event.order.OrderCreatedEvent;
 import com.formoura.inventory.dto.request.InventoryRequest;
 import com.formoura.inventory.dto.response.InventoryResponse;
@@ -38,4 +39,5 @@ public interface InventoryService {
                                   Integer quantity);
     void reduceStock(OrderCreatedEvent event);
 
+    void rollbackInventory(InventoryRollbackEvent event);
 }

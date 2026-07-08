@@ -1,6 +1,8 @@
 package com.formoura.payment.service;
 
+import com.formoura.payment.dto.request.CreatePaymentRequest;
 import com.formoura.payment.dto.request.PaymentRequest;
+import com.formoura.payment.dto.request.VerifyPaymentRequest;
 import com.formoura.payment.dto.response.PaymentResponse;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public interface PaymentService {
 
     PaymentResponse verifyPayment(String transactionId);
 
+    PaymentResponse createPayment(CreatePaymentRequest request);
 
-
+    PaymentResponse verifyPayment(VerifyPaymentRequest request);
 }

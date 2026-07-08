@@ -3,12 +3,14 @@ package com.formoura.payment.dto.response;
 import com.formoura.payment.entity.PaymentGateway;
 import com.formoura.payment.entity.PaymentMethod;
 import com.formoura.payment.entity.PaymentStatus;
+import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class PaymentResponse {
 
     private Long id;
@@ -38,5 +40,11 @@ public class PaymentResponse {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private String razorpayOrderId;
+
+    private String razorpayPaymentId;
+
+    private String key;
 
 }

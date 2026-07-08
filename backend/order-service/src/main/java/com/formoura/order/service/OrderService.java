@@ -2,6 +2,7 @@ package com.formoura.order.service;
 
 import com.formoura.order.dto.request.OrderRequest;
 import com.formoura.order.dto.response.OrderResponse;
+import com.formoura.order.entity.Order;
 import com.formoura.order.entity.OrderStatus;
 
 import java.util.List;
@@ -16,9 +17,11 @@ public interface OrderService {
 
     List<OrderResponse> getOrdersByUser(Long userId);
 
-    OrderResponse updateOrderStatus(Long id,
-                                   OrderStatus status);
+    OrderResponse updateOrderStatus(Long id, OrderStatus status);
 
     void cancelOrder(Long id);
 
+    void confirmOrder(Long orderId);
+
+    Order getOrderEntity(Long orderId);
 }

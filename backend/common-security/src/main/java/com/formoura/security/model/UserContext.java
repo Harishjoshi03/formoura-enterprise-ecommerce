@@ -15,8 +15,5 @@ public class UserContext {
 
     private String email;
 
-    private String username;
-
-    private String role;
-
+    private Role role;
 }

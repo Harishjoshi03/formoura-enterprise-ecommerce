@@ -5,6 +5,32 @@ spring:
   application:
     name: auth-service
 
+  cloud:
+
+    gateway:
+
+      routes:
+
+        - id: auth-service
+
+          uri: lb://AUTH-SERVICE
+
+          predicates:
+
+            - Path=/auth/**
+
+          filters:
+
+            - name: RequestRateLimiter
+
+              args:
+
+                redis-rate-limiter.replenishRate: 5
+
+                redis-rate-limiter.burstCapacity: 10
+
+                key-resolver: "#{@userKey}"
+
   datasource:
     url: jdbc:mysql://localhost:3306/formoura_auth
     username: root
@@ -21,8 +47,13 @@ spring:
       port: 6379
 
 jwt:
+
+#  secret-key: YOUR_256_BIT_SECRET_KEY
+#  access-token-expiration: 86400000
+#  refresh-token-expiration: 604800000
+
   secret-key: formoura123456789formoura123456789formoura123456789
-  access-token-expiration: 86400000
+  access-token-expiration: 900000
   refresh-token-expiration: 604800000
 
 springdoc:

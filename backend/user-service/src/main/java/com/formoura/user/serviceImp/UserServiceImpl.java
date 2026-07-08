@@ -1,9 +1,11 @@
 package com.formoura.user.serviceImp;
 
+import com.formoura.event.user.UserRegisteredEvent;
 import com.formoura.exception.exception.BusinessException;
 import com.formoura.user.dto.request.*;
 import com.formoura.user.dto.response.UserResponse;
 import com.formoura.user.entity.User;
+import com.formoura.user.kafka.UserEventProducer;
 import com.formoura.user.mapper.UserMapper;
 import com.formoura.user.repository.UserRepository;
 import com.formoura.user.service.UserService;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,7 +29,9 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Override
+    private final UserEventProducer userEventProducer;
+
+  /*  @Override
     public UserResponse createUser(CreateUserRequest request) {
 
         if(repository.existsByEmail(request.getEmail())){
@@ -49,6 +54,51 @@ public class UserServiceImpl implements UserService {
 
         return mapper.toResponse(
                 repository.save(user));
+
+    }*/
+
+    @Override
+    public UserResponse createUser(CreateUserRequest request) {
+
+        if (repository.existsByEmail(request.getEmail())) {
+
+            throw new BusinessException("Email already exists");
+
+        }
+
+        if (repository.existsByPhone(request.getPhone())) {
+
+            throw new BusinessException("Phone already exists");
+
+        }
+
+        User user = mapper.toEntity(request);
+
+        user.setPassword(
+                passwordEncoder.encode(
+                        request.getPassword()));
+
+        // Save User
+        User savedUser = repository.save(user);
+
+        // Publish Kafka Event
+        UserRegisteredEvent event = UserRegisteredEvent.builder()
+
+                .userId(savedUser.getId())
+
+                .fullName(savedUser.getName())   // agar entity me getName() hai to ye sahi hai
+
+                .email(savedUser.getEmail())
+
+                .role(savedUser.getRole().name())
+
+                .registeredAt(LocalDateTime.now())
+
+                .build();
+
+        userEventProducer.publish(event);
+
+        return mapper.toResponse(savedUser);
 
     }
 

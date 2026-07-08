@@ -59,7 +59,7 @@ public class AuthController {
         return ResponseEntity.ok("Logout Successful");
 
     }*/
-
+/*
     @PostMapping("/logout")
     public ResponseEntity<String> logout(
             @RequestHeader("Authorization") String authHeader) {
@@ -72,6 +72,18 @@ public class AuthController {
         );
 
         return ResponseEntity.ok("Logout Successfully");
+    }*/
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+
+            @RequestHeader("Authorization")
+            String authorization){
+
+        authService.logout(authorization);
+
+        return ResponseEntity.ok().build();
+
     }
 
     @PostMapping("/refresh")

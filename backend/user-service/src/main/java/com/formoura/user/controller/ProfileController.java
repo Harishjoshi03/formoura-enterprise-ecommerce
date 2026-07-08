@@ -1,7 +1,7 @@
 package com.formoura.user.controller;
 
-import com.formoura.user.config.UserContext;
-import com.formoura.user.util.UserContextUtil;
+import com.formoura.security.model.UserContext;
+import com.formoura.security.util.UserContextUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

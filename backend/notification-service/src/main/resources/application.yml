@@ -1,0 +1,141 @@
+server:
+  port: 8088
+
+spring:
+
+  application:
+    name: notification-service
+
+  config:
+    import: optional:configserver:http://localhost:8888
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/formoura_notification
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
+
+
+  mail:
+
+    host: smtp.gmail.com
+
+    port: 587
+
+    username: harishchandrjoshi3@gmail.com
+
+    password: Anji@2509
+
+    properties:
+      mail:
+       smtp:
+         auth: true
+         starttls:
+         enable: true
+
+  kafka:
+
+    bootstrap-servers: localhost:9092
+
+    consumer:
+
+      group-id: formoura-group
+
+      auto-offset-reset: earliest
+
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      properties:
+
+        spring:
+
+          json:
+
+            trusted:
+
+              packages: "*"
+
+    producer:
+
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+eureka:
+  client:
+
+    service-url:
+
+      defaultZone: http://localhost:8761/eureka
+
+springdoc:
+
+  api-docs:
+    enabled: true
+
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+  packages-to-scan: com.formoura.notification.controller
+
+  paths-to-match:
+    - /api/**
+
+resilience4j:
+
+  circuitbreaker:
+
+    instances:
+
+      notificationService:
+
+        slidingWindowSize: 5
+
+        failureRateThreshold: 50
+
+  retry:
+
+    instances:
+
+      notificationService:
+
+        maxAttempts: 3
+
+        waitDuration: 2s
+
+  ratelimiter:
+
+    instances:
+
+      notificationService:
+
+        limitForPeriod: 5
+
+        limitRefreshPeriod: 10s
+
+        timeoutDuration: 5s
+
+  bulkhead:
+
+    instances:
+
+      notificationService:
+
+        maxConcurrentCalls: 5
+
+jwt:
+  secret-key: bXktc3VwZXItc2VjcmV0LWtleS1mb3ItZm9ybW91cmEtMjU2LWJpdA==
+  access-token-expiration: 900000
+  refresh-token-expiration: 604800000

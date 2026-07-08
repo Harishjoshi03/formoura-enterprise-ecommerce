@@ -78,8 +78,6 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-
-
         <!-- Kafka -->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
@@ -107,12 +105,18 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Swagger -->
         <dependency>
+            <groupId>com.formoura</groupId>
+            <artifactId>common-swagger</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- Swagger -->
+     <!--   <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc.version}</version>
-        </dependency>
+        </dependency>-->
 
         <!-- Lombok -->
         <dependency>
@@ -145,6 +149,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.formoura</groupId>
+            <artifactId>common-events</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>

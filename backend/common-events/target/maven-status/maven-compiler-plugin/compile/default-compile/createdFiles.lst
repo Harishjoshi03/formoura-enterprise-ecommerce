@@ -1,0 +1,12 @@
+com\formoura\event\inventory\InventoryUpdatedEvent.class
+com\formoura\event\product\ProductCreatedEvent.class
+com\formoura\event\user\UserRegisteredEvent$UserRegisteredEventBuilder.class
+com\formoura\event\user\UserRegisteredEvent.class
+com\formoura\event\product\ProductCreatedEvent$ProductCreatedEventBuilder.class
+com\formoura\event\order\OrderCreatedEvent.class
+com\formoura\event\inventory\InventoryUpdatedEvent$InventoryUpdatedEventBuilder.class
+com\formoura\event\order\OrderItemEvent$OrderItemEventBuilder.class
+com\formoura\event\payment\PaymentSuccessEvent$PaymentSuccessEventBuilder.class
+com\formoura\event\order\OrderCreatedEvent$OrderCreatedEventBuilder.class
+com\formoura\event\payment\PaymentSuccessEvent.class
+com\formoura\event\order\OrderItemEvent.class

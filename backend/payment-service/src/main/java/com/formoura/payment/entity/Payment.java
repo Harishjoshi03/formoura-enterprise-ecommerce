@@ -43,6 +43,15 @@ public class Payment {
     @Column(unique = true)
     private String transactionId;
 
+    @Column(name = "gateway_order_id", unique = true)
+    private String gatewayOrderId;
+
+    @Column(name = "gateway_payment_id")
+    private String gatewayPaymentId;
+
+    @Column(name = "gateway_signature")
+    private String gatewaySignature;
+
     @Builder.Default
     private String currency = "INR";
 

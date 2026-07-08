@@ -20,5 +20,4 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
     Page<Inventory> findByWarehouseContainingIgnoreCase(String warehouse,
                                                         Pageable pageable);
-
 }

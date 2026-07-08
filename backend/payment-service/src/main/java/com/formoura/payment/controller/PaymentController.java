@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +28,11 @@ public class PaymentController {
     @Operation(summary = "Create Payment")
     @PostMapping
     @PreAuthorize("@roleChecker.isUser()")
-    public PaymentResponse createPayment(
+    public ResponseEntity<PaymentResponse> createPayment(
             @Valid @RequestBody PaymentRequest request) {
 
-        return service.createPayment(request);
+        return  ResponseEntity.ok(
+                service.createPayment(request));
     }
 
     // ==========================================

@@ -20,6 +20,14 @@ public enum OrderStatus {
 
     RETURNED,
 
-    REFUNDED
+    REFUNDED,
+
+    CREATED,
+
+    INVENTORY_RESERVED,
+
+    PAYMENT_PENDING,
+
+    PAYMENT_SUCCESS
 
 }

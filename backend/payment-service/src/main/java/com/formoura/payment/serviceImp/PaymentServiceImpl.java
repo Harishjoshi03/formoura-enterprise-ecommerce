@@ -1,23 +1,36 @@
 
 package com.formoura.payment.serviceImp;
 
+import com.formoura.event.notification.InvoiceEvent;
 import com.formoura.exception.exception.BusinessException;
 import com.formoura.payment.client.OrderClient;
 import com.formoura.payment.client.dto.OrderResponse;
+import com.formoura.payment.dto.request.CreatePaymentRequest;
 import com.formoura.payment.dto.request.PaymentRequest;
+import com.formoura.payment.dto.request.VerifyPaymentRequest;
 import com.formoura.payment.dto.response.PaymentResponse;
 import com.formoura.payment.entity.Payment;
 import com.formoura.payment.entity.PaymentStatus;
+import com.formoura.payment.kafka.PaymentEventProducer;
 import com.formoura.payment.mapper.PaymentMapper;
 import com.formoura.payment.repository.PaymentRepository;
 import com.formoura.payment.service.PaymentService;
+import com.formoura.payment.util.InvoiceGenerator;
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import com.razorpay.Utils;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +41,18 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentMapper mapper;
 
     private final OrderClient orderClient;
+
+    private final RazorpayClient razorpayClient;
+
+    private final InvoiceGenerator invoiceGenerator;
+
+    private final PaymentEventProducer paymentEventProducer;
+
+    @Value("${razorpay.key-id}")
+    private String keyId;
+
+    @Value("${razorpay.key-secret}")
+    private String keySecret;
 
     // ===================================================
     // Create Payment
@@ -191,9 +216,19 @@ public class PaymentServiceImpl implements PaymentService {
 
         repository.save(payment);
 
+        String invoicePath =
+                invoiceGenerator.generateInvoice(payment);
+
         orderClient.updatePaymentStatus(
                 payment.getOrderId(),
                 "PAID");
+        InvoiceEvent event = InvoiceEvent.builder()
+                            .orderId(payment.getOrderId())
+                            .userId(payment.getUserId())
+                            .email("harishjoshi579@gmail.com")
+                            .invoicePath(invoicePath)
+                            .build();
+        paymentEventProducer.publishInvoice(event);
 
         return mapper.toResponse(payment);
     }
@@ -282,5 +317,152 @@ public class PaymentServiceImpl implements PaymentService {
 
         throw new BusinessException(
                 "Failed to update Order Service.");
+    }
+
+    @Override
+    public PaymentResponse createPayment(
+            CreatePaymentRequest request) {
+
+        try {
+
+            JSONObject options = new JSONObject();
+
+            options.put(
+                    "amount",
+                    request.getAmount().multiply(
+                            java.math.BigDecimal.valueOf(100)));
+
+            options.put(
+                    "currency",
+                    "INR");
+
+            options.put(
+                    "receipt",
+                    "order_" + request.getOrderId());
+
+            Order order =
+                    razorpayClient.orders.create(options);
+
+            Payment payment = Payment.builder()
+
+                    .orderId(request.getOrderId())
+
+                    .userId(request.getUserId())
+
+                    .amount(request.getAmount())
+
+                    .paymentMethod(request.getPaymentMethod())
+
+                    .paymentStatus(PaymentStatus.PENDING)
+
+                    .gatewayOrderId(
+                            order.get("id"))
+
+                    .createdAt(LocalDateTime.now())
+
+                    .updatedAt(LocalDateTime.now())
+
+                    .build();
+
+            repository.save(payment);
+
+            return PaymentResponse.builder()
+
+                    .paymentId(payment.getId().toString())
+
+                    .razorpayOrderId(
+                            payment.getGatewayOrderId())
+
+                    .key(keyId)
+
+                    .build();
+
+        } catch (Exception ex) {
+
+            throw new RuntimeException(ex);
+
+        }
+
+    }
+
+    @Override
+    public PaymentResponse verifyPayment(
+            VerifyPaymentRequest request) {
+
+        try {
+
+            Payment payment = repository
+
+                    .findByGatewayOrderId(
+                            request.getRazorpayOrderId())
+
+                    .orElseThrow(() ->
+                            new BusinessException(
+                                    "Payment Not Found"));
+
+            Map<String,String> attributes =
+                    new HashMap<>();
+
+            attributes.put(
+                    "razorpay_order_id",
+                    request.getRazorpayOrderId());
+
+            attributes.put(
+                    "razorpay_payment_id",
+                    request.getRazorpayPaymentId());
+
+            attributes.put(
+                    "razorpay_signature",
+                    request.getRazorpaySignature());
+
+            boolean verified =
+                    Utils.verifyPaymentSignature(
+                            (JSONObject) attributes,
+                            keySecret);
+
+            if(!verified){
+
+                payment.setPaymentStatus(
+                        PaymentStatus.FAILED);
+
+                repository.save(payment);
+
+                throw new BusinessException(
+                        "Invalid Signature");
+
+            }
+
+            payment.setGatewayPaymentId(
+                    request.getRazorpayPaymentId());
+
+            payment.setGatewaySignature(
+                    request.getRazorpaySignature());
+
+            payment.setPaymentStatus(
+                    PaymentStatus.SUCCESS);
+
+            repository.save(payment);
+
+            return PaymentResponse.builder()
+
+                    .paymentId(payment.getId().toString())
+
+                    .razorpayOrderId(
+                            payment.getGatewayOrderId())
+
+                    .razorpayPaymentId(
+                            payment.getGatewayPaymentId())
+
+                    .paymentStatus(PaymentStatus.SUCCESS)
+
+                    .build();
+
+        }
+        catch (Exception ex){
+
+            throw new RuntimeException(ex);
+
+        }
+
     }
 }

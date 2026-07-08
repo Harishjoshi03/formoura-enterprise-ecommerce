@@ -32,6 +32,13 @@
 
         <!-- Business Services -->
         <module>user-service</module>
+        <module>product-service</module>
+        <module>inventory-service</module>
+        <module>cart-service</module>
+        <module>order-service</module>
+        <module>payment-service</module>
+        <module>notification-service</module>
+        <module>common-events</module>
 
         <!-- Future Services -->
 

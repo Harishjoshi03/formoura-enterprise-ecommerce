@@ -237,4 +237,21 @@ public class JwtUtil {
         }
 
     }
+    public String generateRefreshToken(Long userId) {
+
+        return Jwts.builder()
+
+                .subject(String.valueOf(userId))
+
+                .issuedAt(new Date())
+
+                .expiration(new Date(
+                        System.currentTimeMillis()
+                                + refreshTokenExpiration))
+
+                .signWith(getSigningKey())
+
+                .compact();
+
+    }
 }

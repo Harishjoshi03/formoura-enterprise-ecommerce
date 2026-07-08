@@ -1,36 +1,37 @@
 package com.formoura.gateway.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.ReactiveRedisTemplate;
+import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
 public class TokenBlacklistService {
 
-    private static final String PREFIX = "BLACKLIST:";
+    private final ReactiveStringRedisTemplate redisTemplate;
 
-    private final ReactiveRedisTemplate<String, String> redisTemplate;
+    private static final String PREFIX = "blacklist:";
 
-    public Mono<Boolean> blacklistToken(String token,
-                                        long remainingValidity) {
+    public Mono<Boolean> isBlacklisted(String token) {
+
+        return redisTemplate
+                .hasKey(PREFIX + token);
+
+    }
+
+    public Mono<Boolean> blacklist(
+            String token,
+            long expiryMillis) {
 
         return redisTemplate.opsForValue()
 
                 .set(
                         PREFIX + token,
-                        "BLACKLISTED",
-                        Duration.ofMillis(remainingValidity)
+                        "logout",
+                        java.time.Duration.ofMillis(expiryMillis)
                 );
-    }
 
-    public Mono<Boolean> isBlacklisted(String token) {
-
-        return redisTemplate.hasKey(PREFIX + token);
     }
 
 }

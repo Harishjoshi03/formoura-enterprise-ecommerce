@@ -7,8 +7,10 @@ import com.formoura.user.entity.Role;
 import com.formoura.user.entity.UserStatus;
 import com.formoura.user.mapper.UserMapper;
 import com.formoura.user.repository.UserRepository;
+import com.formoura.user.security.annotation.IsAdminOrOwner;
 import com.formoura.user.service.UserService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +37,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @SecurityRequirement(name = "Bearer Authentication")
     public UserResponse createUser(
             @Valid @RequestBody CreateUserRequest request){
 
@@ -41,7 +45,10 @@ public class UserController {
 
     }
 
+
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{id}")
+    @IsAdminOrOwner
     public UserResponse getUser(
             @PathVariable Long id){
 
@@ -49,6 +56,7 @@ public class UserController {
 
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping
     public List<UserResponse> getAllUsers(){
 
@@ -56,7 +64,9 @@ public class UserController {
 
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/{id}")
+    @IsAdminOrOwner
     public UserResponse updateUser(
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserRequest request){
@@ -65,7 +75,9 @@ public class UserController {
 
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/{id}")
+    @PreAuthorize("@authorizationService.isSuperAdmin()")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(
             @PathVariable Long id){
@@ -74,6 +86,7 @@ public class UserController {
 
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @PatchMapping("/{id}/role")
     public void changeRole(
             @PathVariable Long id,
@@ -83,6 +96,7 @@ public class UserController {
 
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @PatchMapping("/{id}/password")
     public void changePassword(
             @PathVariable Long id,
@@ -92,6 +106,7 @@ public class UserController {
 
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @PatchMapping("/{id}/enable")
     public void enableUser(
             @PathVariable Long id){
@@ -100,6 +115,7 @@ public class UserController {
 
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @PatchMapping("/{id}/disable")
     public void disableUser(
             @PathVariable Long id){
@@ -108,8 +124,8 @@ public class UserController {
 
     }
 
-    @GetMapping("/page")
 
+    @GetMapping("/page")
     public Page<UserResponse> getUsers(
 
             @RequestParam(defaultValue="0")

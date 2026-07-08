@@ -1,3 +1,4 @@
+/*
 package com.formoura.security.filter;
 
 import com.formoura.security.model.UserContext;
@@ -10,18 +11,22 @@ public class UserContextFilter{
 
     public static final String USER_CONTEXT = "USER_CONTEXT";
 
-    /**
+    */
+/**
      * Get logged-in user from ServerWebExchange
-     */
+     *//*
+
     public UserContext getUser(ServerWebExchange exchange) {
 
         return exchange.getAttribute(USER_CONTEXT);
 
     }
 
-    /**
+    */
+/**
      * Check ADMIN role
-     */
+     *//*
+
     public boolean isAdmin(UserContext user) {
 
         return user != null
@@ -29,9 +34,11 @@ public class UserContextFilter{
 
     }
 
-    /**
+    */
+/**
      * Check SUPER_ADMIN role
-     */
+     *//*
+
     public boolean isSuperAdmin(UserContext user) {
 
         return user != null
@@ -39,9 +46,11 @@ public class UserContextFilter{
 
     }
 
-    /**
+    */
+/**
      * Check SELLER role
-     */
+     *//*
+
     public boolean isSeller(UserContext user) {
 
         return user != null
@@ -49,9 +58,11 @@ public class UserContextFilter{
 
     }
 
-    /**
+    */
+/**
      * Check CUSTOMER role
-     */
+     *//*
+
     public boolean isCustomer(UserContext user) {
 
         return user != null
@@ -59,9 +70,11 @@ public class UserContextFilter{
 
     }
 
-    /**
+    */
+/**
      * Check DELIVERY_PARTNER role
-     */
+     *//*
+
     public boolean isDeliveryPartner(UserContext user) {
 
         return user != null
@@ -69,9 +82,11 @@ public class UserContextFilter{
 
     }
 
-    /**
+    */
+/**
      * Generic role checker
-     */
+     *//*
+
     public boolean hasRole(UserContext user, String role) {
 
         return user != null
@@ -80,4 +95,4 @@ public class UserContextFilter{
 
     }
 
-}
+}*/

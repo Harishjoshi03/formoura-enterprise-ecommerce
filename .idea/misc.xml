@@ -15,6 +15,13 @@
         <option value="$PROJECT_DIR$/backend/config-server/pom.xml" />
         <option value="$PROJECT_DIR$/backend/audit-service/pom.xml" />
         <option value="$PROJECT_DIR$/backend/user-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/product-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/inventory-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/cart-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/order-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/payment-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/notification-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/common-events/pom.xml" />
       </list>
     </option>
   </component>

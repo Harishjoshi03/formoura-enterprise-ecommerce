@@ -1,0 +1,67 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: payment-service
+
+  config:
+    import: optional:configserver:http://localhost:8888
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/formoura_payment
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+springdoc:
+  api-docs:
+    enabled: true
+
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+  packages-to-scan: com.formoura.payment.controller
+
+  paths-to-match:
+    - /api/**
+
+resilience4j:
+
+  circuitbreaker:
+
+    instances:
+
+      orderService:
+
+        slidingWindowSize: 10
+
+        failureRateThreshold: 50
+
+        waitDurationInOpenState: 30s
+
+feign:
+
+  client:
+
+    config:
+
+      default:
+
+        loggerLevel: FULL
+
+jwt:
+  secret-key: bXktc3VwZXItc2VjcmV0LWtleS1mb3ItZm9ybW91cmEtMjU2LWJpdA==
+  access-token-expiration: 900000
+  refresh-token-expiration: 604800000

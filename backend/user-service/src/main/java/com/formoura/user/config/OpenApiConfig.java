@@ -1,3 +1,4 @@
+/*
 package com.formoura.user.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
@@ -14,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI formouraOpenAPI() {
+    public OpenAPI userOpenAPI() {
 
         final String securitySchemeName = "Bearer Authentication";
 
@@ -80,4 +81,4 @@ public class OpenApiConfig {
 
     }
 
-}
+}*/
